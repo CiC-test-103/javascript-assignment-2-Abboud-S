@@ -7,6 +7,11 @@ class Bank {
 
     // Add methods here:
     // Example: createAccount(name, initialDeposit)
+    createAccount(name, initialDeposit = 0) {
+        const account = new Account(name, initialDeposit);
+        this.accounts.push(account);
+        return account;
+    }
 
 }
 
@@ -19,18 +24,56 @@ class Account {
     }
 
     // Add methods here:
-    // Example: deposit(amount) 
+    // Example: deposit(amount)
+    deposit(amount) {
+        if (amount <= 0) {
+            return "Deposit amount must be greater than zero."
+        }
+        this.balance += amount;
+        this.transactionHistory.push({ transactionType: 'Deposit', amount })
+        return `Deposited $${amount}. New balance: $${this.balance}.`
+    }
     // example data to be stored in transactionHistory { transactionType: 'Deposit', amount: 500 }
 
     // Example: withdraw(amount)
+    withdraw(amount) {
+        if (amount <= 0) {
+            return "Withdrawal amount must be greater than zero."
+        }
+        if (amount > this.balance) {
+            return "Insufficient balance."
+        }
+        this.balance -= amount
+        
     // example data to be stored in transactionHistory { transactionType: 'Withdrawal', amount: 200 }
-
+    this.transactionHistory.push({ transactionType: 'Withdrawal', amount })
+    return `Withdrew $${amount}. New balance: $${this.balance}.`
+}
     // Example: transfer(amount, recipientAccount)
+    transfer(amount, recipientAccount) {
+        if (amount <= 0) {
+            return "Transfer amount must be greater than zero."
+        }
+        if (amount > this.balance) {
+            return "Insufficient balance."
+        }
+        this.balance -= amount
+        recipientAccount.balance += amount
     // example data to be stored in transactionHistory:
     // for account sending { transactionType: 'Transfer', amount: 300, to: recipientName }
+    this.transactionHistory.push({
+        transactionType: 'Transfer', amount,
+        to: recipientAccount.name
+    });
     // for account recieving { transactionType: 'Received', amount: 300, from: senderName }
-    
+    recipientAccount.transactionHistory.push({
+        transactionType: 'Received', amount,
+        from: this.name
+    });
     // Example: checkBalance()
+    checkBalance()
+        return `Current balance: $${this.balance}.`
+    }
 }
 
 //<-------------------------------DO NOT WRITE BELOW THIS LINE------------------------------>
